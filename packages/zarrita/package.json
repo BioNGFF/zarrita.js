@@ -16,7 +16,7 @@
 		}
 	},
 	"dependencies": {
-		"@zarrita/storage": "workspace:^",
+		"@zarrita/storage": "github:biongff/zarrita.js#jpeg&path:/packages/@zarrita-storage",
 		"@jsquash/jpeg": "^1.6.0",
 		"numcodecs": "^0.3.2"
 	},

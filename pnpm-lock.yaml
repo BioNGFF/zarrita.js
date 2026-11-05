@@ -79,8 +79,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       '@zarrita/storage':
-        specifier: workspace:^
-        version: link:../@zarrita-storage
+        specifier: github:biongff/zarrita.js#jpeg&path:/packages/@zarrita-storage
+        version: git+https://git@github.com:biongff/zarrita.js.git#5447df6fe9a9c22d912b1ef2f352065baa57dedc&path:/packages/@zarrita-storage
       numcodecs:
         specifier: ^0.3.2
         version: 0.3.2
@@ -937,6 +937,10 @@ packages:
 
   '@vueuse/shared@12.7.0':
     resolution: {integrity: sha512-coLlUw2HHKsm7rPN6WqHJQr18WymN4wkA/3ThFaJ4v4gWGWAQQGK+MJxLuJTBs4mojQiazlVWAKNJNpUWGRkNw==}
+
+  '@zarrita/storage@git+https://git@github.com:biongff/zarrita.js.git#5447df6fe9a9c22d912b1ef2f352065baa57dedc&path:/packages/@zarrita-storage':
+    resolution: {commit: 5447df6fe9a9c22d912b1ef2f352065baa57dedc, path: /packages/@zarrita-storage, repo: git@github.com:biongff/zarrita.js.git, type: git}
+    version: 0.1.4
 
   algoliasearch@5.20.3:
     resolution: {integrity: sha512-iNC6BGvipaalFfDfDnXUje8GUlW5asj0cTMsZJwO/0rhsyLx1L7GZFAY8wW+eQ6AM4Yge2p5GSE5hrBlfSD90Q==}
@@ -2523,6 +2527,11 @@ snapshots:
       vue: 3.5.13(typescript@5.8.2)
     transitivePeerDependencies:
       - typescript
+
+  '@zarrita/storage@git+https://git@github.com:biongff/zarrita.js.git#5447df6fe9a9c22d912b1ef2f352065baa57dedc&path:/packages/@zarrita-storage':
+    dependencies:
+      reference-spec-reader: 0.2.0
+      unzipit: 1.4.3
 
   algoliasearch@5.20.3:
     dependencies:
