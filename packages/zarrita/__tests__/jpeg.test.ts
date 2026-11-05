@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { JPEGCodec } from "../src/codecs/jpeg.js";
 import { create_codec_pipeline } from "../src/codecs.js";
+import { Array as ZarrArray } from "../src/hierarchy.js";
+import { get } from "../src/indexing/ops.js";
+import type { ArrayMetadata } from "../src/metadata.js";
 
 const { decode } = vi.hoisted(() => ({ decode: vi.fn() }));
 
@@ -34,6 +37,44 @@ describe("JPEG codec", () => {
 		expect(chunk.data).toEqual(new Uint8Array([10, 20, 30, 40, 50, 60]));
 		expect(chunk.shape).toEqual([3, 1, 2]);
 		expect(chunk.stride).toEqual([1, 6, 3]);
+	});
+
+	it("supports selecting a channel from a transposed JPEG array", async () => {
+		decode.mockResolvedValue({
+			width: 2,
+			height: 1,
+			data: new Uint8ClampedArray([10, 20, 30, 40, 50, 60]),
+		});
+		const metadata: ArrayMetadata<"uint8"> = {
+			zarr_format: 3,
+			node_type: "array",
+			shape: [3, 1, 2],
+			data_type: "uint8",
+			chunk_grid: {
+				name: "regular",
+				configuration: { chunk_shape: [3, 1, 2] },
+			},
+			chunk_key_encoding: {
+				name: "default",
+				configuration: { separator: "/" },
+			},
+			codecs: [
+				{ name: "transpose", configuration: { order: [1, 2, 0] } },
+				{ name: "imagecodecs_jpeg", configuration: {} },
+			],
+			fill_value: 0,
+			attributes: {},
+		};
+		const store = new Map([["/c/0/0/0", new Uint8Array([1])]]);
+		const arr = new ZarrArray(store, "/", metadata);
+
+		const channel = await get(arr, [0, null, null]);
+
+		expect(channel).toMatchObject({
+			data: new Uint8Array([10, 40]),
+			shape: [1, 2],
+			stride: [2, 1],
+		});
 	});
 
 	it("accepts RGB output without alpha", async () => {

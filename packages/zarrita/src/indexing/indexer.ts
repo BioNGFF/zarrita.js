@@ -206,6 +206,7 @@ interface ChunkProjection {
 export class BasicIndexer {
 	dim_indexers: (SliceDimIndexer | IntDimIndexer)[];
 	shape: number[];
+	output_axes: number[];
 
 	constructor({ selection, shape, chunk_shape }: BasicIndexerProps) {
 		// setup per-dimension indexers
@@ -220,6 +221,9 @@ export class BasicIndexer {
 					dim_chunk_len: chunk_shape[i],
 				});
 			},
+		);
+		this.output_axes = this.dim_indexers.flatMap((ixr, i) =>
+			ixr instanceof SliceDimIndexer ? [i] : [],
 		);
 		this.shape = this.dim_indexers
 			.filter((ixr) => ixr instanceof SliceDimIndexer)

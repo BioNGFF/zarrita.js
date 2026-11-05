@@ -46,7 +46,7 @@ export async function get<
 	let out = setter.prepare(
 		new context.TypedArray(indexer.shape.reduce((a, b) => a * b, 1)),
 		indexer.shape,
-		context.get_strides(indexer.shape),
+		context.get_strides(indexer.shape, indexer.output_axes),
 	);
 
 	let queue = opts.create_queue?.() ?? create_queue();

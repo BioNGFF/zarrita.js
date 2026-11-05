@@ -69,6 +69,21 @@ function get_array_order(
 	return maybe_transpose_codec?.configuration?.order ?? "C";
 }
 
+function get_strides_for_axes(
+	shape: number[],
+	order: "C" | "F" | number[],
+	axes?: readonly number[],
+): number[] {
+	if (!axes || typeof order === "string") {
+		return get_strides(shape, order);
+	}
+
+	const reduced_order = order
+		.filter((axis) => axes.includes(axis))
+		.map((axis) => axes.indexOf(axis));
+	return get_strides(shape, reduced_order);
+}
+
 const CONTEXT_MARKER = Symbol("zarrita.context");
 
 export function get_context<T>(obj: { [CONTEXT_MARKER]: T }): T {
@@ -97,8 +112,8 @@ function create_context<Store extends Readable, D extends DataType>(
 				shape: configuration.chunk_shape,
 				codecs: configuration.codecs,
 			}),
-			get_strides(shape: number[]) {
-				return get_strides(shape, native_order);
+			get_strides(shape: number[], axes?: readonly number[]) {
+				return get_strides_for_axes(shape, native_order, axes);
 			},
 			get_chunk_bytes: create_sharded_chunk_getter(
 				location,
@@ -119,8 +134,8 @@ function create_context<Store extends Readable, D extends DataType>(
 			shape: metadata.chunk_grid.configuration.chunk_shape,
 			codecs: metadata.codecs,
 		}),
-		get_strides(shape: number[]) {
-			return get_strides(shape, native_order);
+		get_strides(shape: number[], axes?: readonly number[]) {
+			return get_strides_for_axes(shape, native_order, axes);
 		},
 		async get_chunk_bytes(chunk_coords, options) {
 			let chunk_key = shared_context.encode_chunk_key(chunk_coords);
@@ -140,7 +155,7 @@ interface ArrayContext<Store extends Readable, D extends DataType> {
 	/** The TypedArray constructor for this array chunks. */
 	TypedArray: TypedArrayConstructor<D>;
 	/** A function to get the strides for a given shape, using the array order */
-	get_strides(shape: number[]): number[];
+	get_strides(shape: number[], axes?: readonly number[]): number[];
 	/** The fill value for this array. */
 	fill_value: Scalar<D> | null;
 	/** A function to get the bytes for a given chunk. */
