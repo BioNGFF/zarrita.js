@@ -4,6 +4,7 @@
 	"license": "MIT",
 	"imports": {
 		"@zarrita/storage": "jsr:@zarrita/storage@^0.1.4",
+		"@jsquash/jpeg": "npm:@jsquash/jpeg@^1.6.0",
 		"numcodecs": "npm:numcodecs@^0.3.2"
 	},
 	"exports": {

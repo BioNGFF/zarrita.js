@@ -3,6 +3,7 @@ import { BitroundCodec } from "./codecs/bitround.js";
 import { BytesCodec } from "./codecs/bytes.js";
 import { Crc32cCodec } from "./codecs/crc32c.js";
 import { GzipCodec } from "./codecs/gzip.js";
+import { JPEGCodec } from "./codecs/jpeg.js";
 import { JsonCodec } from "./codecs/json2.js";
 import { TransposeCodec } from "./codecs/transpose.js";
 import { VLenUTF8 } from "./codecs/vlen-utf8.js";
@@ -35,7 +36,8 @@ function create_default_registry(): Map<string, () => Promise<CodecEntry>> {
 		.set("crc32c", () => Crc32cCodec)
 		.set("vlen-utf8", () => VLenUTF8)
 		.set("json2", () => JsonCodec)
-		.set("bitround", () => BitroundCodec);
+		.set("bitround", () => BitroundCodec)
+		.set("imagecodecs_jpeg", () => JPEGCodec);
 }
 
 export const registry: Map<string, () => Promise<CodecEntry>> =

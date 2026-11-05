@@ -6,8 +6,9 @@
 
 a minimal & modular Zarr implementation in TypeScript
 
-- **Zero dependencies** (optionally
-  [`scijs/ndarray`](https://github.com/scijs/ndarray))
+- Supports JPEG-compressed `uint8` RGB chunks via
+  [`@jsquash/jpeg`](https://github.com/jamsinclair/jSquash/tree/main/packages/jpeg)
+  (WebAssembly)
 - Runs natively in **Node**, **Browsers**, and **Deno** (ESM)
 - Supports **v2** or **v3** protocols, C & F-order arrays, diverse data-types,
   and [ZEP2 Sharding](https://zarr.dev/zeps/draft/ZEP0002.html)
@@ -30,6 +31,11 @@ npm install zarrita
 Read
 [the documentation](https://manzt.github.io/zarrita.js/get-started.html#getting-started)
 to learn more about other environments.
+
+JPEG decoding is intended for browser and Web Worker environments supported by
+jSquash. Vite applications may need to exclude `@jsquash/jpeg` from dependency
+pre-bundling; see
+[jSquash's Vite notes](https://github.com/jamsinclair/jSquash#issues-with-vite-and-vue-build-environments).
 
 ## Usage
 
