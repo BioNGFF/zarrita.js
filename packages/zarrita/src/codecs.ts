@@ -5,6 +5,7 @@ import { CastValueCodec } from "./codecs/cast_value.js";
 import { Crc32cCodec } from "./codecs/crc32c.js";
 import { DeltaCodec } from "./codecs/delta.js";
 import { GzipCodec } from "./codecs/gzip.js";
+import { JPEGCodec } from "./codecs/jpeg.js";
 import { JsonCodec } from "./codecs/json2.js";
 import { ScaleOffsetCodec } from "./codecs/scale_offset.js";
 import { ShuffleCodec } from "./codecs/shuffle.js";
@@ -64,6 +65,7 @@ function createDefaultRegistry(): Map<string, () => Promise<CodecEntry>> {
 			.set("bitround", () => BitroundCodec)
 			.set("cast_value", () => CastValueCodec)
 			.set("scale_offset", () => ScaleOffsetCodec)
+			.set("imagecodecs_jpeg", () => JPEGCodec)
 			// numcodecs (v2 compat)
 			.set("numcodecs.blosc", blosc)
 			.set("numcodecs.lz4", lz4)
