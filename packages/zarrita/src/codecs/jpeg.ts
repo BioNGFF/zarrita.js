@@ -29,23 +29,30 @@ export class JPEGCodec {
 		return new JPEGCodec(configuration, meta);
 	}
 
+	//Do we need to extend to different dtypes?
 	encode(_chunk: Chunk<"uint8">): Uint8Array {
 		throw new Error("JPEG encoding is not implemented.");
 	}
 
 	async decode(bytes: Uint8Array): Promise<Chunk<"uint8">> {
 		const { decode } = await import("@jsquash/jpeg");
+		//Is taking the input Uint8Array, pre-allocating an ArrayBuffer, and then creating a Uint8Array from that ArrayBuffer not circular?
 		const input = new ArrayBuffer(bytes.byteLength);
 		new Uint8Array(input).set(bytes);
 		const image = await decode(input, { preserveOrientation: false });
+
+		//Shape as taken from zarr chunk dimensions
 		const [, height, width] = this.#shape;
 
+		//Not sure if we're mixing chunk definitions here? A zarr chunk is the whole file, but we are only decoding 1 pixel of it at a time
+		//Need to understand this
 		if (image.width !== width || image.height !== height) {
 			throw new Error(
 				`JPEG dimensions ${image.width}x${image.height} do not match chunk dimensions ${width}x${height}`,
 			);
 		}
 
+		//What is going on here?
 		const pixels = width * height;
 		let data: Uint8Array;
 		if (image.data.length === pixels * 4) {
