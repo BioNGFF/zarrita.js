@@ -38,6 +38,7 @@ function create_default_registry(): Map<string, () => Promise<CodecEntry>> {
 		.set("json2", () => JsonCodec)
 		.set("bitround", () => BitroundCodec)
 		.set("imagecodecs_jpeg", () => JPEGCodec);
+		.set("jpeg", () => JPEGCodec);
 }
 
 export const registry: Map<string, () => Promise<CodecEntry>> =
