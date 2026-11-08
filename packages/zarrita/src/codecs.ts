@@ -38,7 +38,9 @@ function create_default_registry(): Map<string, () => Promise<CodecEntry>> {
 		.set("json2", () => JsonCodec)
 		.set("bitround", () => BitroundCodec)
 		//Zarr Conventions compliant name
-		.set("jpeg", () => JPEGCodec);
+		.set("jpeg", () => JPEGCodec)
+		//Support imagecodecs-generated jpeg
+		.set("imagecodecs_jpeg", () => JPEGCodec);
 }
 
 export const registry: Map<string, () => Promise<CodecEntry>> =
