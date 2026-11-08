@@ -16,6 +16,7 @@ import {
 	type DataTypeQuery,
 	ensure_correct_scalar,
 	get_ctr,
+	get_selection_aware_order,
 	get_strides,
 	is_dtype,
 	is_sharding_codec,
@@ -69,21 +70,6 @@ function get_array_order(
 	return maybe_transpose_codec?.configuration?.order ?? "C";
 }
 
-function get_strides_for_axes(
-	shape: number[],
-	order: "C" | "F" | number[],
-	axes?: readonly number[],
-): number[] {
-	if (!axes || typeof order === "string") {
-		return get_strides(shape, order);
-	}
-
-	const reduced_order = order
-		.filter((axis) => axes.includes(axis))
-		.map((axis) => axes.indexOf(axis));
-	return get_strides(shape, reduced_order);
-}
-
 const CONTEXT_MARKER = Symbol("zarrita.context");
 
 export function get_context<T>(obj: { [CONTEXT_MARKER]: T }): T {
@@ -113,7 +99,10 @@ function create_context<Store extends Readable, D extends DataType>(
 				codecs: configuration.codecs,
 			}),
 			get_strides(shape: number[], axes?: readonly number[]) {
-				return get_strides_for_axes(shape, native_order, axes);
+				return get_strides(
+					shape,
+					get_selection_aware_order(native_order, axes),
+				);
 			},
 			get_chunk_bytes: create_sharded_chunk_getter(
 				location,
@@ -135,7 +124,7 @@ function create_context<Store extends Readable, D extends DataType>(
 			codecs: metadata.codecs,
 		}),
 		get_strides(shape: number[], axes?: readonly number[]) {
-			return get_strides_for_axes(shape, native_order, axes);
+			return get_strides(shape, get_selection_aware_order(native_order, axes));
 		},
 		async get_chunk_bytes(chunk_coords, options) {
 			let chunk_key = shared_context.encode_chunk_key(chunk_coords);

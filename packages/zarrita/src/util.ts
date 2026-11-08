@@ -107,6 +107,22 @@ export function get_strides(
 	return stride;
 }
 
+export function get_selection_aware_order(
+	order: "C" | "F" | readonly number[],
+	axes?: readonly number[],
+): "C" | "F" | number[] {
+	if (typeof order === "string") {
+		return order;
+	}
+	if (!axes) {
+		return [...order];
+	}
+
+	return order
+		.filter((axis) => axes.includes(axis))
+		.map((axis) => axes.indexOf(axis));
+}
+
 // https://zarr-specs.readthedocs.io/en/latest/v3/core/v3.0.html#chunk-key-encoding
 export function create_chunk_key_encoder({
 	name,

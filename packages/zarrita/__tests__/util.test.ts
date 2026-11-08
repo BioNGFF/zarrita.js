@@ -8,6 +8,7 @@ import {
 import {
 	byteswap_inplace,
 	get_ctr,
+	get_selection_aware_order,
 	get_strides,
 	is_dtype,
 } from "../src/util.js";
@@ -105,6 +106,31 @@ describe("get_strides", () => {
 	])("get_strides(%o, %s) -> %o", (shape, order, expected) => {
 		expect(get_strides(shape, order)).toStrictEqual(expected);
 	});
+});
+
+describe("get_selection_aware_order", () => {
+	test.each([
+		[
+			[1, 2, 0],
+			[0, 2],
+			[1, 0],
+		],
+		[
+			[1, 2, 0],
+			[1, 2],
+			[0, 1],
+		],
+		[[1, 2, 0], [], []],
+	] as const)("reduces order %o to axes %o -> %o", (order, axes, expected) => {
+		expect(get_selection_aware_order(order, axes)).toStrictEqual(expected);
+	});
+
+	test.each(["C", "F"] as const)(
+		"preserves %s order for selected axes",
+		(order) => {
+			expect(get_selection_aware_order(order, [0, 2])).toBe(order);
+		},
+	);
 });
 
 describe("is_dtype", () => {

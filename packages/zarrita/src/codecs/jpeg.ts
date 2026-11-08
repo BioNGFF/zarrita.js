@@ -78,6 +78,7 @@ export class JPEGCodec {
 				shape: this.#shape,
 				stride: get_strides(this.#shape, "C"),
 			};
+			
 		}
 		const rgb_data = this.#removeAlphaChannel(image, pixels);
 
