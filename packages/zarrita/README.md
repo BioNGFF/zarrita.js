@@ -6,7 +6,7 @@
 
 a minimal & modular Zarr implementation in TypeScript
 
-- Supports JPEG-compressed `uint8` RGB chunks via
+- Supports JPEG-compressed `uint8` grayscale and RGB chunks via
   [`@jsquash/jpeg`](https://github.com/jamsinclair/jSquash/tree/main/packages/jpeg)
   (WebAssembly)
 - Runs natively in **Node**, **Browsers**, and **Deno** (ESM)
