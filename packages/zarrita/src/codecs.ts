@@ -37,7 +37,7 @@ function create_default_registry(): Map<string, () => Promise<CodecEntry>> {
 		.set("vlen-utf8", () => VLenUTF8)
 		.set("json2", () => JsonCodec)
 		.set("bitround", () => BitroundCodec)
-		.set("imagecodecs_jpeg", () => JPEGCodec)
+		//Zarr Conventions compliant name
 		.set("jpeg", () => JPEGCodec);
 }
 

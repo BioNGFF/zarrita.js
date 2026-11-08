@@ -6,6 +6,7 @@ type JPEGMetadata = {
 	shape: number[];
 };
 
+//Zarr Conventions compliant JPEG codec
 export class JPEGCodec {
 	kind = "array_to_bytes";
 	#shape: number[];
@@ -42,7 +43,7 @@ export class JPEGCodec {
 		return new Uint8Array(copy.buffer, copy.byteOffset, pixels * 3);
 	}
 
-	static fromConfig(configuration: unknown, meta: JPEGMetadata): JPEGCodec {
+	static fromConfig(configuration: Record<string, string>, meta: JPEGMetadata): JPEGCodec {
 		return new JPEGCodec(configuration, meta);
 	}
 
